@@ -7,8 +7,8 @@ defmodule HTTPoisonRetry.Mixfile do
       app: :httpoison_retry,
       version: @version,
       elixir: "~> 1.5",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       source_url: "git@github.com:mgwidmann/httpoison_retry.git",
       homepage_url: "https://github.com/mgwidmann/httpoison_retry",
       description: "Automatic configurable sleep/retry for HTTPoison requests",
@@ -32,10 +32,10 @@ defmodule HTTPoisonRetry.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 0.13 or ~> 1.0"},
+      {:httpoison, "~> 2.0"},
       # Docs
       {:ex_doc, "~> 0.18", only: :dev},
-      {:earmark, "~> 1.2", only: :dev},
+      {:earmark, "~> 1.2", only: :dev}
     ]
   end
 
@@ -48,12 +48,11 @@ defmodule HTTPoisonRetry.Mixfile do
   end
 
   defp aliases do
-    [publish: ["hex.publish", "hex.publish docs", "tag"],
-     tag: &tag_release/1]
+    [publish: ["hex.publish", "hex.publish docs", "tag"], tag: &tag_release/1]
   end
 
   defp tag_release(_) do
-    Mix.shell.info "Tagging release as #{@version}"
+    Mix.shell().info("Tagging release as #{@version}")
     System.cmd("git", ["tag", "-a", "v#{@version}", "-m", "v#{@version}"])
     System.cmd("git", ["push", "--tags"])
   end
